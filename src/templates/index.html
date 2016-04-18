@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+{% block d3container %}
+
+    <div class='container'>
+        <!-- /.row -->
+
+        <!-- Portfolio Item Row -->
+
+            <div class='col-md-10' style='margin-top:50px'>
+                <script>
+
+                d3.json('static/json_dictionary.json', function(error, graph) {
+                    // the nodes are an array of hosts
+                    // the links correspond to the node indices that link one node to the other. i.e. justin and my computers are one link, christian and ariane's hosts are another link.
+
+                    var nodes = graph.nodes;
+                    var links = graph.links;
+
+                var height = $('div.d3container').height();
+                var width = $('div.col-md-10').width();
+
+                var svg = d3.select('div.col-md-10').append('svg')
+                    .attr('width', width)
+                    .attr('height', height)
+
+                var force = d3.layout.force()
+                    .size([width, height])
+                    .nodes(nodes)
+                    .links(links);
+
+                force.linkDistance(width/3);
+
+                var link = svg.selectAll('.link')
+                    .data(graph.links)
+                    .enter().append('line')
+                    .attr('class', 'link')
+                    .style('stroke-width', 1)
+                   
+
+
+                var node = svg.selectAll('.node')
+                    .data(nodes)
+                    .enter().append('circle')
+                    .attr('class', 'node')
+                    .attr('PortService', function(d) {
+                        return d.PortServices;
+                    })
+                    .style('fill', function(d) { 
+                        if (d.group === 1) {
+                            return '#E1B594';
+                            };
+                        if (d.group === 2) {
+                            return '#FF2B1A';
+                            };
+                        if (d.group === 3) {
+                            return '#E1B594';
+                            };
+                        if (d.group === 4) {
+                            return '#20B8FE';
+
+                            };
+                        if (d.group === 5) {
+                            return '#271192';
+                            };
+                        })
+
+                force.on('end', function() {
+                    node.attr('r', 7)
+                    .attr('cx', function(d) { return d.x; })
+                    .attr('cy', function(d) { return d.y; });
+
+                link.attr('x1', function(d) { return d.source.x; })
+                    .attr('y1', function(d) { return d.source.y; })
+                    .attr('x2', function(d) { return d.target.x; })
+                    .attr('y2', function(d) { return d.target.y; });
+
+                });
+                force.start();
+            });
+                </script>
+            </div>
+
+            <div class='col-md-2' style='margin-top:50px'>
+                <h6>Project Description</h6>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam viverra euismod odio, gravida pellentesque urna varius vitae. Sed dui lorem, adipiscing in adipiscing et, interdum nec metus. Mauris ultricies, justo eu convallis placerat, felis enim.</p>
+                <h6>Project Details</h6>
+                <ul>
+                    <li>Lorem Ipsum</li>
+                    <li>Dolor Sit Amet</li>
+                    <li>Consectetur</li>
+                    <li>Adipiscing Elit</li>
+                </ul>
+            </div>
+       
+    </div>
+    <!-- /.container -->
+
+    <!-- jQuery -->
+    <script src='static/components/jquery/dist/jquery.js'></script>
+    
+
+{% endblock %}

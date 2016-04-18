@@ -1,0 +1,19 @@
+{
+  "name": "portscanner_revised",
+  "authors": [
+    "Blythe Sheldon <blythe.sheldon@gmail.com>"
+  ],
+  "description": "",
+  "main": "",
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "components",
+  ],
+  "devDependencies": {
+    "jquery": "^2.2.3",
+    "d3": "^3.5.16"
+  }
+}
