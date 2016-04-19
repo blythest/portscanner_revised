@@ -1,24 +1,24 @@
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang='en'>
 <head>
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta charset='utf-8'>
+  <meta http-equiv='X-UA-Compatible' content='IE=edge'>
   <title>Psst, Your Telnet's Showing</title>
-  <meta name="description" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link href="http://db.onlinewebfonts.com/c/721ab30c108d476c3538d4ccefc46937?family=LinotypeUniversW01-Regular" rel="stylesheet" type="text/css"/>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap-theme.min.css') }}">
+  <meta name='description' content=''>
+  <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+  <link href='http://db.onlinewebfonts.com/c/721ab30c108d476c3538d4ccefc46937?family=LinotypeUniversW01-Regular' rel='stylesheet' type='text/css'/>
+  <link rel='stylesheet' href='{{ url_for('static', filename='css/bootstrap.min.css') }}'>
+  <link rel='stylesheet' href='{{ url_for('static', filename='css/bootstrap-theme.min.css') }}'>
 
     <!-- Custom CSS -->
-    <link href="static/css/portfolio-item.css" rel="stylesheet">
+    <link href='static/css/portfolio-item.css' rel='stylesheet'>
 
 </head>
 <body>
 
-  <script src="{{ url_for('static', filename='components/d3/d3.min.js') }}"></script>
-  <script src="{{ url_for('static', filename='components/jquery/dist/jquery.min.js') }}"></script>
+  <script src='{{ url_for('static', filename='components/d3/d3.min.js') }}'></script>
+  <script src='{{ url_for('static', filename='components/jquery/dist/jquery.min.js') }}'></script>
 
   <!-- Google Analytics - Update UA-XXXXX-X ID -->
   <script>
@@ -30,28 +30,29 @@
     ga('create','UA-XXXXX-X');ga('send','pageview');
   </script>
 
-  <nav class="navbar navbar-fixed-top" role="navigation">
-        <div class="container">
+  <nav class='navbar navbar-fixed-top' role='navigation'>
+        <div class='container'>
             <!-- Brand and toggle get grouped for better mobile display -->
-            <div class="navbar-header">
+            <div class='navbar-header'>
              
-                <a class="navbar-brand" href="#">Psst, Your Telnet's Showing</a>
+                <a class='navbar-brand' href='#'>Psst, Your Telnet's Showing</a>
             </div>
             <!-- Collect the nav links, forms, and other content for toggling -->
-            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
-                <ul class="nav navbar-nav">
+            <div class='collapse navbar-collapse' id='bs-example-navbar-collapse-1'>
+                <ul class='nav navbar-nav'>
                     <li>
-                        <a href="#">What is this?</a>
+                        <a href='#'>What is this?</a>
                     </li>
                 </ul>
             </div>
+           <button type='button' class='btn btn-outline'><a style='text-decoration: none' href='/scan'>Scan</a></button>
             <!-- /.navbar-collapse -->
         </div>
         <!-- /.container -->
     </nav>
 
 
-  <div class="d3container">
+  <div class='d3container'>
   {% block d3container %}{% endblock d3container %}
 
   </div>
