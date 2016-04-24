@@ -21,12 +21,14 @@ def index():
         print str(Exception)
     return render_template("index.html", message=message)
 
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
 @app.route("/scan")
 def scan():
     daemon.main("python portscanner.py")
     return redirect("/", code=302)
-# to do: allow user to override these in a web form
-# portscanner.main(portscanner.NETMASK, portscanner.IP, portscanner.FILENAME)
 
 if __name__ == "__main__":
-    app.run(debug=True, port=5000)
+    app.run()
