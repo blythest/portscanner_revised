@@ -30,7 +30,7 @@ d3.json("static/json_dictionary.json", function(error, graph) {
         .style("stroke", "white")
         .style("stroke-width", "2px")
         .attr("class", "node")
-        .attr("r", 7)
+        .attr("r", 8)
         .attr("name", function(d) {
             return d.name;
         })
@@ -56,36 +56,44 @@ d3.json("static/json_dictionary.json", function(error, graph) {
                 return "#C300FF";
                 }
             })
-        .on("mousedown", function() {
+        .on("mousedown", function(d) {
+            var idx = d3.select(d).node().index;
+            var selection = d3.selectAll("circle")[0][idx];
+            d3.select(selection).style("stroke", "yellow").attr('r', 11);
+            console.info(d3.select(selection))
             var colHeight = $('div.col-md-10').height() - 20;
             var info = d3.select('div.info');
             var circles = d3.select('div.circle-keys-inner');
-            var infoFooter = d3.select('div.info-footer').style('font-size', '16px');
+            var infoFooter = d3.select('div.info-footer');
             var legend = d3.select('h6.legend');
 
+            d3.select(selection).on("mouseup", function(d) {
+                d3.select(selection).style("stroke", "white").attr('r', 8);
+            })
+
             $('div.col-md-2').height(colHeight);
+            // d3.select().style("stroke", "yellow");
             legend.text('network info');
             circles.style('visibility', 'hidden');
             info.style('visibility', 'visible');
             info.html(checkForEmptyServices(this));
-            infoFooter.html('<a>legend</a>');
+            infoFooter.html("<a style='color:yellow'>legend</a>");
 
             infoFooter.on("click", function() {
                 if (legend.text() === 'network info') {
                     legend.text('Legend');
-                    infoFooter.html('<a>network info</a>');
+                    infoFooter.html("<a style='color:yellow'>network info</a>");
                     circles.style('visibility', 'visible');
                     info.style('visibility', 'hidden');
                 } else {
                     legend.text('network info');
-                    infoFooter.html('<a>legend</a>');
+                    infoFooter.html("<a style='color:yellow'>legend</a>");
                     circles.style('visibility', 'hidden');
                     info.style('visibility', 'visible');
-
                 }
-
             }); 
-    });
+        });
+
 
     force.on("tick", tick);
 
@@ -94,7 +102,6 @@ d3.json("static/json_dictionary.json", function(error, graph) {
             .attr("y1", function(d) { return d.source.y; })
             .attr("x2", function(d) { return d.target.x; })
             .attr("y2", function(d) { return d.target.y; });
-
 
         node.attr("cx", function(d) { return d.x; })
             .attr("cy", function(d) { return d.y; });
@@ -110,10 +117,10 @@ d3.json("static/json_dictionary.json", function(error, graph) {
         // var os = node._data_.OSMatch
 
         if (ports.length === 0) {       
-            return "host" + name + " " + "<p>" +  "<p> has no open ports.</p>";
+            return "host " + name + " " + "<p>" +  "<p> has no open ports.</p>";
         } else {
             console.log(ports);
-            return "host " + name + " " + "<p> is running " + "<b>" + ports.join(', ') + "<b></p>";
+            return "host " + name + "<p><p> is running " + "<b>" + ports.join(', ') + "<b>";
         }
     };
 

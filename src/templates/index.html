@@ -28,6 +28,14 @@
         padding-left:25px;
     }
 
+    .col-md-2 {
+        max-height:230px;
+    }
+
+    .info-footer {
+        font-size:16px;
+    }
+
 
     @media (min-width: 400px) {
         .info-footer {
@@ -102,6 +110,11 @@
         background-color:#080A40;
     }
 
+    .btn:active {
+        background-color:#fff;
+        font-color: #fff;
+    }
+
     .under-nav {
         margin-left:-5px;
         margin-top:10px;
@@ -111,7 +124,7 @@
 
     <div class='container'>
         <div class='col-md-10'>
-            <a class='btn under-nav' role='button' href='/scan'>SCAN</a></button>
+            <a class='btn under-nav' role='button' href='/scan'>SCAN</a>
             <script src='{{ url_for('static', filename='js/network.js') }}'></script>
             
         </div>
