@@ -1,152 +1,131 @@
-	d3.json('static/json_dictionary.json', function(error, graph) {
-	
-	    var nodes = graph.nodes;
-	    var links = graph.links;
 
-	var height = $('div.d3container').height();
-	var width = $('div.col-md-10').width();
+d3.json("static/json_dictionary.json", function(error, graph) {
 
-	var svg = d3.select('div.col-md-10').append('svg')
-	    .attr('width', width)
-	    .attr('height', height)
+    var height = $('div.d3container').height(),
+        width = $('div.col-md-10').width();
 
-	var force = d3.layout.force()
-	    .size([width, height])
-	    .nodes(nodes)
-	    .links(links);
+    var force = d3.layout.force()
+        .size([width, height])
+        .linkDistance(width/3);
 
-	force.linkDistance(width/3);
+    force
+        .nodes(graph.nodes)
+        .links(graph.links)
+        .start();
 
-	function tick() {
-	    link.attr("x1", function(d) { return d.source.x; })
-	    .attr("y1", function(d) { return d.source.y; })
-	    .attr("x2", function(d) { return d.target.x; })
-	    .attr("y2", function(d) { return d.target.y; });
+    var svg = d3.select("div.col-md-10").append("svg")
+        .attr('width', width)
+        .attr('height', height);
 
 
-	    node.attr("cx", function(d) { return d.x; })
-	    .attr("cy", function(d) { return d.y; });
-	    // node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-	    };4
+    var link = svg.selectAll(".link")
+        .data(graph.links)
+    .enter().append("line")
+        .attr("class", "link")
+        .style("stroke-width", "1px");
 
-	function checkForEmptyServices(node) {
+    var node = svg.selectAll("g.node")
+        .data(graph.nodes)
+    .enter().append("svg:g").append("circle")
+        .style("stroke", "white")
+        .style("stroke-width", "2px")
+        .attr("class", "node")
+        .attr("r", 7)
+        .attr("name", function(d) {
+            return d.name;
+        })
 
-	/*
-	* Takes in the D3 HTML object in the format:
-	* <circle class="node" r="7" name="64:5A:04:87:30:0E portService="netbiOSssn"
-	* fill = "aliceblue" cx="277.707" cy="207.75" style="fill:#537897;"></circle>
-	* returns a string of text.  
-	*/
+        .attr("PortService", function(d) {
+            return d.PortServices;
+        })
+        .style("fill", function(d) { 
+            if (d.group === 1) {
+                return "#31984D";
+                };
+            if (d.group === 2) {
+                return "#FF2B1A";
+                };
+            if (d.group === 3) {
+                return "#E1B594";
+                };
+            if (d.group === 4) {
+                return "#20B8FE";
 
-	var name = node.__data__.Id
-	var ports = node.__data__.PortServices
+                };
+            if (d.group === 5) {
+                return "#C300FF";
+                }
+            })
+        .on("mousedown", function() {
+            var colHeight = $('div.col-md-10').height() - 20;
+            var info = d3.select('div.info');
+            var circles = d3.select('div.circle-keys-inner');
+            var infoFooter = d3.select('div.info-footer').style('font-size', '16px');
+            var legend = d3.select('h6.legend');
 
-	var os_version = node.__data__.OSMatch
+            $('div.col-md-2').height(colHeight);
+            legend.text('network info');
+            circles.style('visibility', 'hidden');
+            info.style('visibility', 'visible');
+            info.html(checkForEmptyServices(this));
+            infoFooter.html('<a>legend</a>');
 
-	// var os = node._data_.OSMatch
+            infoFooter.on("click", function() {
+                if (legend.text() === 'network info') {
+                    legend.text('Legend');
+                    infoFooter.html('<a>network info</a>');
+                    circles.style('visibility', 'visible');
+                    info.style('visibility', 'hidden');
+                } else {
+                    legend.text('network info');
+                    infoFooter.html('<a>legend</a>');
+                    circles.style('visibility', 'hidden');
+                    info.style('visibility', 'visible');
 
-	if (ports.length === 0) {       
-	return "host " + name + "</div> " + "<p>" +  "<p> has no open ports.</p>";
-	} else {
-	console.log(ports);
-	return "host " + "<div style='background-color: yellow; padding-left: 2px'>" + name + "</div> " + "<p> is running " + "<b>" + ports.join(', ') + "<b></p>";
-	}
-	};
+                }
 
-	function checkForEmptyOSMatches(node) {
+            }); 
+    });
 
-	/*
-	* Takes in the D3 HTML object in the format:
-	* <circle class="node" r="7" name="64:5A:04:87:30:0E portService="netbiOSssn"
-	* fill = "aliceblue" cx="277.707" cy="207.75" style="fill:#537897;"></circle>
-	* returns a string of text.  
-	*/
+    force.on("tick", tick);
 
-	var name = node.__data__.name
-	var os_version = node.__data__.OSMatch
-	// var os = node._data_.OSMatch
+    function tick() {
+        link.attr("x1", function(d) { return d.source.x; })
+            .attr("y1", function(d) { return d.source.y; })
+            .attr("x2", function(d) { return d.target.x; })
+            .attr("y2", function(d) { return d.target.y; });
 
-	if (os_version === "") {        
-	return "<p>OS Version unavailable.</p>";
-	} else {
-	return "<p>" + os_version + "</p>";
-	}
-	};
 
-	var tooltip = d3.select('div.col-md-10')
-	    .append('div')
-	    .style('position', 'absolute')
-	    .style('z-index', '10')
-	    .style('visibility', 'hidden')
+        node.attr("cx", function(d) { return d.x; })
+            .attr("cy", function(d) { return d.y; });
+            // node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+    }
 
-	var link = svg.selectAll('.link')
-	    .data(graph.links)
-	    .enter().append('line')
-	    .attr('class', 'link')
-	    .style('stroke-width', 1)
+    function checkForEmptyServices(node) {
+        var name = node.__data__.Id
+        var ports = node.__data__.PortServices
 
-	var node = svg.selectAll('.node')
-	    .data(nodes)
-	    .enter().append('circle')
-	    .attr('class', 'node')
-	    .attr('PortService', function(d) {
-	        return d.PortServices;
-	    })
-	    .style('fill', function(d) { 
-	        if (d.group === 1) {
-	            return '#E1B594';
-	            };
-	        if (d.group === 2) {
-	            return '#FF2B1A';
-	            };
-	        if (d.group === 3) {
-	            return '#E1B594';
-	            };
-	        if (d.group === 4) {
-	            return '#20B8FE';
+        var os_version = node.__data__.OSMatch
 
-	            };
-	        if (d.group === 5) {
-	            return '#271192';
-	            };
-	        })
-	        
-	    .on("mouseover", function() {
-	        tooltip.html(checkForEmptyOSMatches(this))
-	        $('div.info').append("text").html(checkForEmptyServices(this))
-	            return tooltip.style("visibility", "visible");
-	        })
+        // var os = node._data_.OSMatch
 
-	    .on("mousemove", function(){
-	        console.info('event.pageY ', event.pageY);
-	        console.info('event.pageX ', event.pageX);
-	        return tooltip.style("top", (event.pageY)+"px")
-	        .style("left",(event.pageX)+"px")
-	        .style("max-width","200px")
-	        .style("max-height","300px")
-	        .style("background-color", "rgba(163, 224, 255, 0.9)")
-	        .style("padding", "10px")
-	        .style("border-style", "solid")
-	        .style("border-color", "fff")
-	        .style("border-width", "1px")
-	        .style("border-radius", ".3em")
-	        .style("text-align", "center");})
-	    .on("mouseout", function(){
-	        return tooltip.style("visibility", "hidden"),
-	        servicesBox.html(" ")
-	    })
+        if (ports.length === 0) {       
+            return "host" + name + " " + "<p>" +  "<p> has no open ports.</p>";
+        } else {
+            console.log(ports);
+            return "host " + name + " " + "<p> is running " + "<b>" + ports.join(', ') + "<b></p>";
+        }
+    };
 
-	force.on('end', function() {
-	    node.attr('r', 7)
-	    .attr('cx', function(d) { return d.x; })
-	    .attr('cy', function(d) { return d.y; });
+    function checkForEmptyOSMatches(node) {
+        var name = node.__data__.name
+        var os_version = node.__data__.OSMatch
+        // var os = node._data_.OSMatch
 
-	link.attr('x1', function(d) { return d.source.x; })
-	    .attr('y1', function(d) { return d.source.y; })
-	    .attr('x2', function(d) { return d.target.x; })
-	    .attr('y2', function(d) { return d.target.y; });
-
-	});
-
-	force.start();
+        if (os_version === "") {        
+            return "<p>OS Version unavailable.</p>";
+        } else {
+            return "<p>" + os_version + "</p>";
+        }
+    };
 });
