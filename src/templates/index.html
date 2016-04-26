@@ -23,19 +23,13 @@
     .col-md-10 {
         border:solid;
         border-width: 0.1px;
-        border-color:#ccc;
-        padding-top:10px;
-        padding-left:25px;
-    }
-
-    .col-md-2 {
-        max-height:230px;
+        border-color:rgba(245,245,245,0.2);
+        padding-left:10px;
     }
 
     .info-footer {
         font-size:16px;
     }
-
 
     @media (min-width: 400px) {
         .info-footer {
@@ -43,7 +37,7 @@
             cursor: pointer;
             float:right;
             clear:right;
-            margin-top:20px;
+            padding-top:70px;
             text-transform:uppercase;
         }
     }
@@ -102,32 +96,27 @@
     .info {
         float:left;
         position:absolute;
+        cursor:pointer;
     }
 
-    .btn {
-        font-size:14px;
-        border-color:white;
-        background-color:#080A40;
-    }
-
-    .btn:active {
-        background-color:#fff;
-        font-color: #fff;
-    }
-
-    .under-nav {
-        margin-left:-5px;
+    .scan {
         margin-top:10px;
+        z-index:10;
+    }
+
+    .scan a:hover {
+      color:#080A40;
+      text-decoration: none;
     }
 
     </style>
 
     <div class='container'>
         <div class='col-md-10'>
-            <a class='btn under-nav' role='button' href='/scan'>SCAN</a>
-            <script src='{{ url_for('static', filename='js/network.js') }}'></script>
-            
+            <a class='btn scan' style='position:absolute' role='button' href='/scan'>SCAN</a>
+            <script src='{{ url_for('static', filename='js/network.js') }}'></script>      
         </div>
+
         <div class='col-md-2'>
             <h6 class='legend'>Legend</h6>
                 <div class='circle-keys-inner'>
@@ -146,8 +135,5 @@
                 </div>
                 <div class='info-footer'><a></a></div>
         </div>
-
     <script src='static/components/jquery/dist/jquery.js'></script>
-    
-
 {% endblock %}

@@ -30,9 +30,37 @@
       background-color:#080A40;
     }
 
-    a, a:hover {
+    .btn {
+      font-size:14px;
+      border-color:white;
+      border-width:2px;
+      border-radius:0px;
+      background-color:#080A40;
+    }
+
+    .btn:active, .btn:hover {
+        background-color:#fff;
+    }
+
+    a {
+      color: white;
+    }
+
+    a:hover {
       color:white;
-      text-decoration: none;
+    }
+
+    .navbar-nav a:hover {
+      color:#080A40;
+    }
+
+    .info a {
+      min-width:200px;
+      padding-right:20px;
+      text-decoration:none;
+      margin-left:6px;
+      color:#FF5722;
+
     }
 
     .container {
@@ -43,11 +71,6 @@
       min-height:300px;
     }
 
-    .btn {
-      position:fixed;
-    	background-color:gray;
-    	color: white;
-    }
 </style>
 <body>
 
@@ -66,14 +89,12 @@
 
   <nav class='navbar navbar-fixed-top' role='navigation'>
         <div class='container'>
-            <!-- Brand and toggle get grouped for better mobile display -->
             <div class='navbar-header'>
-             
                 <a class='navbar-brand' style='text-transform:uppercase'} href='/'>
                   Left to our own devices
                 </a>
             </div>
-            <!-- Collect the nav links, forms, and other content for toggling -->
+
             <div class='collapse navbar-collapse' id='bs-example-navbar-collapse-1'>
                 <ul class='nav navbar-nav'>
                     <li>
@@ -81,12 +102,8 @@
                     </li>
                 </ul>
             </div>
-            <!-- /.navbar-collapse -->
         </div>
-        <!-- /.container -->
     </nav>
-
-
   <div class='d3container'>
   {% block d3container %}{% endblock d3container %}
 
