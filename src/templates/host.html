@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+{% block d3container %}
+    
+    <style>
+
+    .full-circle {
+        display:inline-block;
+        float:left;
+        background-color: #c06;
+        height: 20px;
+        margin-bottom:4px;
+        margin-right:5px;
+        -moz-border-radius:10px;
+        -webkit-border-radius: 10px;
+        width: 20px;
+    }
+
+    .link {
+        stroke: #999;
+        stroke-opacity: .6;
+    }
+
+    .legend {
+        border-bottom: solid;
+        border-width: 0.1px;
+        font-size:11px;
+        text-transform: uppercase;
+    }
+
+    .under-nav {
+        float:left;
+        margin-left:-15px;
+    }
+
+    </style>
+
+    <div class='container'>
+
+            <div class='col-md-10'>
+                <a class='btn under-nav' role='button' href='/scan'>Scan</a></button>
+                <script src='{{ url_for('static', filename='js/network.js') }}'></script>
+            </div>
+
+            <div class='col-md-2';>
+                <h6 class='legend'>Info</h6>
+                <div style='height:30vh'>
+                    <div class='full-circle' style='background-color:#FF2B1A'>
+                    </div>Linux
+                    <p>
+                    <div class='full-circle' style='background-color:#E1B594'>
+                    </div>Mac OSX
+                    <p>
+                    <div class='full-circle' style='background-color:#20B8FE'>
+                    </div>iPhone
+                    <p>
+                    <div class='full-circle' style='background-color:#271192'>
+                    </div>Unknown 
+                </div>
+                <div class='info' style='height: 30vh'></div>
+            </div>
+       
+    </div>
+
+    <script src='static/components/jquery/dist/jquery.js'></script>
+    
+
+{% endblock %}

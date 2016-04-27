@@ -1,4 +1,16 @@
-d3.json("static/json_dictionary.json", function(error, graph) {
+var xhr = d3.xhr("/static/json_dictionary.json");
+
+xhr.response(function(request) {
+    return JSON.parse(request.responseText);
+})
+
+xhr.on('progress', function(){
+    // spinner
+})
+
+xhr.get(function(error, graph){
+
+    console.log(graph)
 
     var height = $('div.d3container').height(),
         width = $('div.col-md-10').width();
@@ -79,7 +91,8 @@ d3.json("static/json_dictionary.json", function(error, graph) {
             .style("text-align", "center");})
 
         .on("mouseout", function(){
-            return tooltip.style("visibility", "hidden")};)
+            return tooltip.style("visibility", "hidden");})
+
         .on("mousedown", function(d) {
             var idx = d3.select(d).node().index;
             var selection = d3.selectAll("circle")[0][idx];
@@ -116,9 +129,7 @@ d3.json("static/json_dictionary.json", function(error, graph) {
                 }
             }); 
         });
-
     force.on("tick", tick);
-
     function tick() {
         link.attr("x1", function(d) { return d.source.x; })
             .attr("y1", function(d) { return d.source.y; })
@@ -155,3 +166,7 @@ d3.json("static/json_dictionary.json", function(error, graph) {
         }
     };
 });
+
+    
+
+    
