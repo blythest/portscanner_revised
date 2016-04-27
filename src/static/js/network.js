@@ -1,3 +1,14 @@
+
+
+xmlhttp.onreadystatechange = function() {
+    if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+        var newResponse = JSON.parse(xmlhttp.responseText);
+        return newResponse
+    }
+};
+xmlhttp.open("GET", url, true);
+xmlhttp.send();
+
 d3.json("static/json_dictionary.json", function(error, graph) {
 
     var height = $('div.d3container').height(),
@@ -58,11 +69,11 @@ d3.json("static/json_dictionary.json", function(error, graph) {
         .append("div")
         .style("position", "absolute")
         .style("z-index", "10")
-        .style("visibility", "hidden")
-        d3.selectAll(".node")
+        .style("visibility", "hidden");
 
+        d3.selectAll(".node")
         .on("mouseover", function(){
-            tooltip.html(checkForEmptyOSMatches(this))
+            tooltip.html(checkForEmptyOSMatches(this));
             return tooltip.style("visibility", "visible");})
 
         .on("mousemove", function(){
@@ -76,14 +87,15 @@ d3.json("static/json_dictionary.json", function(error, graph) {
             .style("border-width", "1px")
             .style("border-color", "rgba(245,245,245,0.1)")
             .style("border-radius", "3px")
-            .style("text-align", "center");})
-
+            .style("text-align", "center")
+        })
         .on("mouseout", function(){
-            return tooltip.style("visibility", "hidden")};)
+            return tooltip.style("visibility", "hidden")})
+
         .on("mousedown", function(d) {
             var idx = d3.select(d).node().index;
             var selection = d3.selectAll("circle")[0][idx];
-            d3.select(selection).style("stroke-width", "2px").attr('r', 11);
+                d3.select(selection).style("stroke-width", "2px").attr('r', 11);
             console.info(d3.select(selection))
             var colHeight = $('div.col-md-10').height() - 20;
             var info = d3.select('div.info');
@@ -114,7 +126,7 @@ d3.json("static/json_dictionary.json", function(error, graph) {
                     circles.style('visibility', 'hidden');
                     info.style('visibility', 'visible');
                 }
-            }); 
+            });
         });
 
     force.on("tick", tick);
@@ -133,8 +145,17 @@ d3.json("static/json_dictionary.json", function(error, graph) {
     function checkForEmptyServices(node) {
         var name = node.__data__.Id
         var ports = node.__data__.PortServices
-        var openPorts = node.__data__.OpenPorts
+        var openPorts = [node.__data__.OpenPorts]
         var os_version = node.__data__.OSMatch
+
+        var result = openPorts.map(function(ports) {
+
+            }
+
+        });
+
+        console.info('result ', result)
+
         if (ports.length === 0) {       
             return "Host<a class='info'>" + name + "</a><p><p>IP<a class='info'>" + node.__data__.IP + "</a><p><p>" +  "<p> has no open ports.</p>";
         } else {
