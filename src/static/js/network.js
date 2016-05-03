@@ -1,172 +1,294 @@
 var xhr = d3.xhr("/static/json_dictionary.json");
 
-xhr.response(function(request) {
+var res = xhr.response(function(request) {
+    'use strict';
     return JSON.parse(request.responseText);
-})
-
-xhr.on('progress', function(){
-    // spinner
-})
-
-xhr.get(function(error, graph){
-
-    console.log(graph)
-
-    var height = $('div.d3container').height(),
-        width = $('div.col-md-10').width();
-
-    var force = d3.layout.force()
-        .size([width, height])
-        .linkDistance(width/3);
-
-    force
-        .nodes(graph.nodes)
-        .links(graph.links)
-        .start();
-
-    var svg = d3.select("div.col-md-10").append("svg")
-        .attr('width', width)
-        .attr('height', height);
-
-
-    var link = svg.selectAll(".link")
-        .data(graph.links)
-    .enter().append("line")
-        .attr("class", "link")
-        .style("stroke-width", "1px");
-
-    var node = svg.selectAll("g.node")
-        .data(graph.nodes)
-    .enter().append("svg:g").append("circle")
-        .style("stroke", "white")
-        .style("stroke-width", "2px")
-        .attr("class", "node")
-        .attr("r", 8)
-        .attr("name", function(d) {
-            return d.name;
-        })
-        .attr("PortService", function(d) {
-            return d.PortServices;
-        })
-        .style("fill", function(d) { 
-            if (d.group === 1) {
-                return "#31984D";
-                };
-            if (d.group === 2) {
-                return "#FF2B1A";
-                };
-            if (d.group === 3) {
-                return "#E1B594";
-                };
-            if (d.group === 4) {
-                return "#20B8FE";
-
-                };
-            if (d.group === 5) {
-                return "#C300FF";
-                }
-            })
-        var tooltip = d3.select("body")
-        .append("div")
-        .style("position", "absolute")
-        .style("z-index", "10")
-        .style("visibility", "hidden")
-        d3.selectAll(".node")
-
-        .on("mouseover", function(){
-            tooltip.html(checkForEmptyOSMatches(this))
-            return tooltip.style("visibility", "visible");})
-
-        .on("mousemove", function(){
-            return tooltip.style("top", (event.pageY-10)+"px")
-            .style("left",(event.pageX+10)+"px")
-            .style("max-width","200px")
-            .style("max-height","300px")
-            .style("background-color", "rgba(0,0,0, 0.8)")
-            .style("padding", "10px")
-            .style("border", "solid")
-            .style("border-width", "1px")
-            .style("border-color", "rgba(245,245,245,0.1)")
-            .style("border-radius", "3px")
-            .style("text-align", "center");})
-
-        .on("mouseout", function(){
-            return tooltip.style("visibility", "hidden");})
-
-        .on("mousedown", function(d) {
-            var idx = d3.select(d).node().index;
-            var selection = d3.selectAll("circle")[0][idx];
-            d3.select(selection).style("stroke-width", "2px").attr('r', 11);
-            console.info(d3.select(selection))
-            var colHeight = $('div.col-md-10').height() - 20;
-            var info = d3.select('div.info');
-            var circles = d3.select('div.circle-keys-inner');
-            var infoFooter = d3.select('div.info-footer');
-            var legend = d3.select('h6.legend');
-
-            d3.select(selection).on("mouseup", function(d) {
-                d3.select(selection).style("stroke", "white").attr('r', 8);
-            })
-
-            $('div.col-md-2').height(colHeight);
-            // d3.select().style("stroke", "yellow");
-            legend.text('network info');
-            circles.style('visibility', 'hidden');
-            info.style('visibility', 'visible');
-            info.html(checkForEmptyServices(this));
-            infoFooter.html("<a class='btn'>legend</a>");
-            infoFooter.on("click", function() {
-                if (legend.text() === 'network info') {
-                    legend.text('Legend');
-                    infoFooter.html("<a class='btn'>network info</a>");
-                    circles.style('visibility', 'visible');
-                    info.style('visibility', 'hidden');
-                } else {
-                    legend.text('network info');
-                    infoFooter.html("<a class='btn'>legend</a>");
-                    circles.style('visibility', 'hidden');
-                    info.style('visibility', 'visible');
-                }
-            }); 
-        });
-    force.on("tick", tick);
-    function tick() {
-        link.attr("x1", function(d) { return d.source.x; })
-            .attr("y1", function(d) { return d.source.y; })
-            .attr("x2", function(d) { return d.target.x; })
-            .attr("y2", function(d) { return d.target.y; });
-
-        node.attr("cx", function(d) { return d.x; })
-            .attr("cy", function(d) { return d.y; });
-            // node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-    }
-
-    function checkForEmptyServices(node) {
-        var name = node.__data__.Id
-        var ports = node.__data__.PortServices
-        var openPorts = node.__data__.OpenPorts
-        var os_version = node.__data__.OSMatch
-        if (ports.length === 0) {       
-            return "Host<a class='info'>" + name + "</a><p><p>IP<a class='info'>" + node.__data__.IP + "</a><p><p>" +  "<p> has no open ports.</p>";
-        } else {
-            return "Host<a class='info'>" + name + "</a><p><p>IP<a class='info'>" + node.__data__.IP + 
-            "</a><p><p>Open Ports<a class='info'>" + openPorts.join(', ') + "</a></br>";
-        }
-    };
-
-    function checkForEmptyOSMatches(node) {
-        var name = node.__data__.name
-        var os_version = node.__data__.OSMatch
-        // var os = node._data_.OSMatch
-
-        if (os_version === "") {        
-            return "<p>OS Version unavailable.</p>";
-        } else {
-            return "<p>" + os_version + "</p>";
-        }
-    };
 });
 
-    
+// // var myHeaders = new Headers();
+
+// // var myInit = { method: 'GET',
+// //                headers: myHeaders,
+// //                mode: 'cors',
+// //                cache: 'default' };
+
+
+// // the fetch API uses Promises to handle results.
+// // the then returns a Response instance.
+// // You can get the response text via chaining the Promise's then method
+// // along with the text() method.
+
+// var app = express();
+
+// app.use(bodyParser.urlencoded({extended: true}));
+// app.use(bodyParser.json());
+
+
+// app.get('/', function(request, response){
+//     response.sendFile(path.__currentDir + '/index.html');
+// });
+
+// app.listen(5001, function(){
+//     console.log("Node.js server started on port 5001...");
+// });
+
+// app.get('/static/json_dictionary.json', function(request, response){
+//   console.log(polls, polls<5);
+//   if(polls < 5){
+//     console.log("sending...empty");
+//     polls++;
+//     response.send({});
+//   }
+//   else {
+//     console.log("sending...object");
+//     response.send(null)
+//     polls = 0;
+//   } 
+// });
+
+// function *pollForLastModified() {
+//     while(true){
+//         yield fetch("/static/json_dictionary.json", {
+//             method:'get'
+//         }).then(function(d){
+//             var json = d.json();
+//             return json;
+//         }).then(function(j) { 
+//             return j[1];
+//         })
+//     }
+// }
+
+// function runPolling(generator){
+//   if(!generator){
+//     generator = pollForLastModified();
+//   }
+
+//   var p = generator.next();
+//   p.value.then(function(d){
+//     console.info(d.last_modified)
+//     if(!d.last_modified){
+//       runPolling(generator);
+//     } else {
+//       console.log(d);
+//     }
+//   });
+// }
+
+// runPolling()
 
     
+function draw() {
+    'use strict';
+    xhr.get(function(error, nodeGraph){
+    var graph = nodeGraph[0];
+    var height = $('div.d3container').height();
+    var width = $('div.col-md-10').width();
+    var force = d3.layout.force()
+        .size([width, height])
+        .linkDistance(width/4);
+
+        force
+            .nodes(graph.nodes)
+            .links(graph.links)
+            .start();
+
+        var svg = d3.select("div.col-md-10").append("svg")
+            .attr('width', width)
+            .attr('height', height);
+
+        var node_drag = d3.behavior.drag()
+            .on("dragstart", dragstart)
+            .on("drag", dragmove)
+            .on("dragend", dragend);
+
+        var link = svg.selectAll(".link")
+            .data(graph.links)
+        .enter().append("line")
+            .attr("class", "link")
+            .style("stroke-width", "1px");
+
+        var node = svg.selectAll("g.node")
+            .data(graph.nodes)
+        .enter().append("svg:g").append("circle")
+            .style("stroke", "white")
+            .style("stroke-width", "2px")
+            .attr("class", "node")
+            .attr("r", 8)
+            .attr("name", function(d){
+                return d.name;
+            })
+            .attr("PortService", function(d){
+                return d.PortServices;
+            })
+            .style("fill", function(d){
+                if (d.group === 1) {
+                    return "#31984D";
+                }
+                if (d.group === 2) {
+                    return "#FF2B1A";
+                }
+                if (d.group === 3) {
+                    return "#E1B594";
+                }
+                if (d.group === 4) {
+                    return "#20B8FE";
+                }
+                if (d.group === 5) {
+                    return "#C300FF";
+                    }
+                })
+            .call(node_drag);
+
+            var tooltip = d3.select("body")
+                .append("div")
+                .style("position", "absolute")
+                .style("z-index", "10")
+                .style("visibility", "hidden");
+                d3.selectAll(".node")
+
+            .on("mouseover", function(){
+                tooltip.html(checkForEmptyOSMatches(this));
+                return tooltip.style("visibility", "visible");})
+
+            .on("mousemove", function(){
+                return tooltip.style("top", (event.pageY-10)+"px")
+                .style("left",(event.pageX+10)+"px")
+                .style("max-width","200px")
+                .style("max-height","300px")
+                .style("background-color", "rgba(0,0,0, 0.8)")
+                .style("padding", "10px")
+                .style("border", "solid")
+                .style("border-width", "1px")
+                .style("border-color", "rgba(245,245,245,0.1)")
+                .style("border-radius", "3px")
+                .style("text-align", "center");})
+
+            .on("mouseout", function(){
+                return tooltip.style("visibility", "hidden");})
+
+            .on("mousedown", function(d) {
+                d3.selectAll('.openPorts').remove()
+                d3.selectAll('.key').selectAll('.full-circle').remove()
+                d3.selectAll('.footer.btn').remove()
+                
+                var idx = d3.select(d).node().index;
+                var selection = d3.selectAll("circle")[0][idx];
+                d3.select(selection).style("stroke", "#A6FFC7");
+                var colHeight = $('div.col-md-10').height() - 20;
+                var info = d3.select('div.info');
+                var legend = d3.select('h6.legend');
+                var footerBtn = d3.select('footer.btn')
+
+                d3.select(selection).on("mouseleave", function(d){
+                    d3.select(selection).style("stroke", "white");
+                });
+
+                $('div.col-md-2').height(colHeight);
+                legend.text('network info');
+                checkForEmptyServices(selection)
+                createFooterBtn(selection)
+            })
+
+            function tick() {
+                link.transition().ease('linear').duration(400)
+                    .attr("x1", function(d) { return d.source.x = Math.max(8, Math.min(width - 8, d.source.x)); })
+                    .attr("y1", function(d) { return d.source.y = Math.max(8, Math.min(height - 8, d.source.y)); })
+                    .attr("x2", function(d) { return d.target.x = Math.max(8, Math.min(width - 8, d.target.x)); })
+                    .attr("y2", function(d) { return d.target.y = Math.max(8, Math.min(height - 8, d.target.y)); });
+
+                node.transition().ease('linear').duration(400)
+                    .attr("cx", function(d) { return d.x = Math.max(8, Math.min(width - 8, d.x)); })
+                    .attr("cy", function(d) { return d.y = Math.max(8, Math.min(height - 8, d.y)); });
+            // node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+            }
+            
+            force.on("tick", tick)
+
+            function redrawColorkey() {
+                var colorData = {'Linux':'#FF2B1A', 'Mac OS X':'#31984D','iPhone':'#20B8FE', 'Unknown':'#C300FF'};
+                d3.selectAll('div.key').selectAll('div.content.full-circle')
+                    .data(d3.entries(colorData))
+                    .enter()
+                    .append('div')
+                    .attr('class', 'full-circle')
+                    .style('background-color', function(d) { return d.value})
+                    .html(function(d) {
+                        return "<p class='margin3 width2'>" + d.key + "</p>"
+                    })
+
+            }
+
+            function createFooterBtn(selection){
+
+                var openPorts = d3.selectAll('.openPorts')
+                d3.selectAll('div.content').append('div')
+                    .attr('class', 'footer btn')
+                    .text('legend')
+                    .style('position', 'absolute')
+                    .style('text-transform', 'uppercase')
+                    .on('click', function() {
+                        if (d3.select('h6.legend').text() === 'network info') {
+                            d3.select(this).text('network info')
+                            d3.select('h6.legend').text('legend')
+                            d3.selectAll('.openPorts').remove()
+                            redrawColorkey()
+      
+                        } else {
+                            d3.select(this).text('legend')
+                            d3.select('h6.legend').text('network info')
+                            checkForEmptyServices(selection)
+                            d3.selectAll('.full-circle').remove()
+
+                            }
+                            
+                        })
+                    }
+        
+            function checkForEmptyServices(node) {
+                var name = node.__data__.Id;
+                var ports = node.__data__.portsMap
+                console.info(d3.keys(ports))
+                
+                if (d3.keys(ports).length === 0) {
+                    return d3.select("body").selectAll("div.info")
+                        .html("<p class='openPorts'>No open ports.</p>")
+
+                }
+                return d3.select("body").selectAll("div.info").selectAll("div.openPorts")
+                    .data(d3.entries(ports))
+                    .enter()
+                    .append("div")
+                    .attr("class", "openPorts")
+                    .html(function(d) { return "<p class='width2'>" + d.key + '<a> ' + d.value + '</a>'})
+                }
+
+            function dragstart(d, i) {
+                force.stop(); // stops the force auto positioning before you start dragging
+            }
+
+            function dragmove(d, i) {
+                d.px += d3.event.dx;
+                d.py += d3.event.dy;
+                d.x += d3.event.dx;
+                d.y += d3.event.dy; 
+                tick(); // this is the key to make it work together with updating both px,py,x,y on d !
+            }
+
+            function dragend(d, i) {
+                d.fixed = true; // of course set the node to fixed so the force doesn't include the node in its auto positioning stuff
+                tick();
+                force.resume();
+            }
+
+            function checkForEmptyOSMatches(node) {
+                var name = node.__data__.name
+                var os_version = node.__data__.OSMatch
+                if (os_version === "") {        
+                    return "<p>OS Version unavailable.</p>";
+                } else {
+                    return "<p>" + os_version + "</p>";
+            }
+        }
+    }); }
+draw();

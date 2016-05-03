@@ -4,16 +4,33 @@
     <style>
 
     .full-circle {
-        display:inline-block;
-        float:left;
         background-color: #c06;
+        max-width:200px;
         height: 20px;
-        margin-bottom:4px;
+        margin-bottom:5px;
+        padding-right:10px;
         margin-right:5px;
         -moz-border-radius:10px;
         -webkit-border-radius: 10px;
         width: 20px;
+        display:block;
     }
+
+    .svg-container {
+	    display: inline-block;
+	    position: relative;
+	    width: 100%;
+	    padding-bottom: 100%; /* aspect ratio */
+	    vertical-align: top;
+	    overflow: hidden;
+	}
+	
+	.svg-content-responsive {
+		display: inline-block;
+		position: absolute;
+		top: 10px;
+		left: 0;
+	}
 
     .link {
         stroke: #999;
@@ -27,52 +44,30 @@
         padding-left:10px;
     }
 
-    .info-footer {
+    .footer {
         font-size:16px;
+        margin-top:30px;
+        margin-bottom:30px;
     }
 
-    @media (min-width: 400px) {
-        .info-footer {
-            position:absolute;
-            cursor: pointer;
-            float:right;
-            clear:right;
-            padding-top:70px;
-            text-transform:uppercase;
-        }
+    .content {
+		width: 71.875%; /* 650/960 */
+		max-width: 960px;
+		position:absolute;
     }
 
-    @media (min-width: 768px) {
-        .info-footer {
-            position:absolute;
-            cursor: pointer;
-            float:right;
-            clear:right;
-            top:15;
-            text-transform:uppercase;
-        }
+    .info {
+    	margin-top:40px;
+    	cursor:pointer;
+        -moz-column-width: 11.5em; /* Firefox */
+		-webkit-column-width: 11.5em; /* webkit, Safari, Chrome */
+		column-width: 11.5em;
+        
     }
 
-    @media (min-width: 992px) {
-        .info-footer {
-            position:absolute;
-            cursor: pointer;
-            float:right;
-            clear:right;
-            bottom:0;
-            text-transform:uppercase;
-        }
-    }
-    
-    @media (min-width: 1200px) {
-        .info-footer {
-            position:absolute;
-            cursor: pointer;
-            float:right;
-            clear:right;
-            bottom:10;
-            text-transform:uppercase;
-        }
+    .key {
+    	display: block;
+    	margin-top:50px;
     }
 
     svg {
@@ -90,13 +85,8 @@
         padding-top:5px;
         padding-bottom:1px;
         font-size:16px;
-        text-transform: uppercase;
-    }
-
-    .info {
-        float:left;
         position:absolute;
-        cursor:pointer;
+        text-transform: uppercase;
     }
 
     .scan {
@@ -109,6 +99,14 @@
       text-decoration: none;
     }
 
+    .width2 {
+    	width:200px;
+    }
+
+    .margin3 {
+    	margin-left:30px;
+    }
+
     </style>
 
     <div class='container'>
@@ -118,22 +116,28 @@
         </div>
 
         <div class='col-md-2'>
-            <h6 class='legend'>Legend</h6>
-                <div class='circle-keys-inner'>
-                    <div class='info'></div>
-                    <div class='full-circle' style='background-color:#FF2B1A'>
-                    </div>Linux
-                    <p>
-                    <div class='full-circle' style='background-color:#31984D'>
-                    </div>Mac OSX
-                    <p>
-                    <div class='full-circle' style='background-color:#20B8FE'>
-                    </div>iPhone
-                    <p>
-                    <div class='full-circle' style='background-color:#C300FF'>
-                    </div>Unknown
+        <h6 class='legend'>Legend</h6>
+            <div class='content'>
+            <div class='key'>
+	                    <div class='full-circle' style='background-color:#FF2B1A'>
+	                    <p class='margin3 width2'>Linux</p>
+	                    </div>
+	                    <p>
+	                    <div class='full-circle' style='background-color:#31984D'>
+	                    <p class='margin3 width2'>Mac OS X</p>
+	                    </div>
+	                    <p>
+	                    <div class='full-circle' style='background-color:#20B8FE'>
+	                    <p class='margin3 width2'>iPhone</p>
+	      				</div>
+	                    <p>
+	                    <div class='full-circle' style='background-color:#C300FF'>
+	                    <p class='margin3 width2'>Unknown</p>
+	                    </div>
+               </div>
+                <div class='info'></div>
+
                 </div>
-                <div class='info-footer'><a></a></div>
         </div>
     <script src='static/components/jquery/dist/jquery.js'></script>
 {% endblock %}

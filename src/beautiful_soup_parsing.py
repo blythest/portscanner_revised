@@ -1,7 +1,7 @@
 import BeautifulSoup
 import json
 import os
-
+from datetime import datetime, timedelta
 
 def get_node_id(host):
 
@@ -194,7 +194,6 @@ def get_sources_and_targets(index_pairings):
         links_list.append(source_target_dictionary)
 
     return links_list
-
         
 def create_nodes_dictionary(h):
     node_dictionary = {}
@@ -207,6 +206,7 @@ def create_nodes_dictionary(h):
     node_dictionary['OSMatch'] = get_os_match(h)
     node_dictionary['group'] = get_group_number_from_name(get_os_match(h))
     node_dictionary['OSType'] = get_os_class(h)
+    node_dictionary['portsMap'] = dict(zip(node_dictionary['OpenPorts'], node_dictionary['PortServices']))
 
     return node_dictionary
 
@@ -220,16 +220,15 @@ def get_links(hosts):
 
 def modification_date(filename):
     time_stamp = os.path.getmtime(filename)
-    return datetime.datetime.fromtimestamp(t)
-
-
-# last_modifed = modification_date("static/nmap_raw.xml")
+    return datetime.fromtimestamp(time_stamp).strftime('%Y-%m-%d %H:%M:%S')
 
 def main(pathname):
 
     xml_doc = BeautifulSoup.BeautifulSoup(open(pathname))
-    hosts = xml_doc.findAll("host")
 
+    last_modified = modification_date("static/nmap_raw.xml")
+
+    hosts = xml_doc.findAll("host")
     links_list = get_links(hosts)
     pairings = get_common_os(links_list)
 
@@ -240,7 +239,7 @@ def main(pathname):
     links = get_sources_and_targets(pairs)
 
     json_blob_dictionary = {}
-    json_blob_dictionary = {"nodes" : make_dictionaries(hosts), "links" : links}
+    json_blob_dictionary = {"nodes" : make_dictionaries(hosts), "links" : links}, {"last_modified" : last_modified}
     print 'json blob dictionary ', json_blob_dictionary
 
     file_output = open("static/json_dictionary.json", "w")

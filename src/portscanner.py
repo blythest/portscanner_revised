@@ -123,6 +123,7 @@ def main(netmask,ip,filename):
 
     nmap_xml_output = open(filename, 'w')
     nmap_xml_output.write(results)
+    print 'writing results'
     nmap_xml_output.close()
     print 'parsing in beautiful soup now'
     beautiful_soup_parsing.main(filename)
