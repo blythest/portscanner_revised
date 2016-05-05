@@ -7,9 +7,9 @@
 
 body {
     padding-top: 70px; /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
-    font-family: 'LinotypeUniversW01-Regular';
-    font-size: 16px;
-    line-height:20px;
+    font-family: "Maison Neue Light";
+    font-size: 14px;
+    line-height:18px;
     color: white;
 }
 

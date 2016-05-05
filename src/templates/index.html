@@ -3,6 +3,8 @@
     
     <style>
 
+    p { margin-bottom: 0px; }
+
     .full-circle {
         background-color: #c06;
         max-width:200px;
@@ -37,7 +39,11 @@
         stroke-width:1px;
     }
 
-    .col-md-10 {
+    .margin-b1 {
+    	margin-bottom:20px;
+    }
+
+    .col-md-12 {
         border:solid;
         border-width: 0.1px;
         border-color:rgba(245,245,245,0.2);
@@ -57,11 +63,12 @@
     }
 
     .info {
+    	font-family:"Maison Mono Light";
     	margin-top:40px;
     	cursor:pointer;
-        -moz-column-width: 11.5em; /* Firefox */
-		-webkit-column-width: 11.5em; /* webkit, Safari, Chrome */
-		column-width: 11.5em;
+        -moz-column-width: 10em; /* Firefox */
+		-webkit-column-width: 10em; /* webkit, Safari, Chrome */
+		column-width: 10em;
         
     }
 
@@ -84,6 +91,7 @@
         width:150px;
         padding-top:5px;
         padding-bottom:1px;
+        font-family: "Maison Neue Demi";
         font-size:16px;
         position:absolute;
         text-transform: uppercase;
@@ -94,9 +102,25 @@
         z-index:10;
     }
 
-    .scan a:hover {
-      color:#080A40;
+    .network {
+    	margin-bottom:5px;
+    }
+
+    .scan a:active {
+      color:#fff;
       text-decoration: none;
+    }
+
+    .sub-hed-mono {
+    	font-family:"Maison Neue Mono";
+    	margin-bottom:5px;
+    	font-size:14px;
+    	color:rgba(158, 158, 158, 1.0);
+    }
+
+    .sub-link {
+    	font-family: "Maison Mono Light";
+    	color: #;
     }
 
     .width2 {
@@ -110,7 +134,7 @@
     </style>
 
     <div class='container'>
-        <div class='col-md-10'>
+        <div class='col-md-12'>
             <a class='btn scan' style='position:absolute' role='button' href='/scan'>SCAN</a>
             <script src='{{ url_for('static', filename='js/network.js') }}'></script>      
         </div>
@@ -119,25 +143,26 @@
         <h6 class='legend'>Legend</h6>
             <div class='content'>
             <div class='key'>
-	                    <div class='full-circle' style='background-color:#FF2B1A'>
-	                    <p class='margin3 width2'>Linux</p>
-	                    </div>
-	                    <p>
-	                    <div class='full-circle' style='background-color:#31984D'>
-	                    <p class='margin3 width2'>Mac OS X</p>
-	                    </div>
-	                    <p>
-	                    <div class='full-circle' style='background-color:#20B8FE'>
-	                    <p class='margin3 width2'>iPhone</p>
-	      				</div>
-	                    <p>
-	                    <div class='full-circle' style='background-color:#C300FF'>
-	                    <p class='margin3 width2'>Unknown</p>
-	                    </div>
-               </div>
-                <div class='info'></div>
-
+                <div class='full-circle' style='background-color:#FF2B1A'>
+                	<p class='margin3 width2'>Linux</p>
                 </div>
+                <p>
+                <div class='full-circle' style='background-color:#31984D'>
+                	<p class='margin3 width2'>Mac OS X</p>
+                </div>
+                <p>
+                <div class='full-circle' style='background-color:#20B8FE'>
+                	<p class='margin3 width2'>iPhone</p>
+  				</div>
+                <p>
+                <div class='full-circle' style='background-color:#C300FF'>
+               		<p class='margin3 width2'>Unknown/ Other</p>
+                </div>
+            </div>
+            <div class='info'>
+            	<div class='host'></div>
+            	<div class='network'></div>
+            </div>
         </div>
     <script src='static/components/jquery/dist/jquery.js'></script>
 {% endblock %}

@@ -18,7 +18,7 @@
 <style>
     @font-face {
       font-family: 'Akkuratmono-Regular';
-      src:url('static//fonts/lineto-akkuratmono-regular.eot');
+      src:url('static/fonts/lineto-akkuratmono-regular.eot');
       src:url('static/fonts/lineto-akkuratmono-regular.eot?#iefix') format('embedded-opentype'),
       url('static/fonts/lineto-akkuratmono-regular.woff') format('woff');
       font-weight: normal;
@@ -26,12 +26,39 @@
       color: white;
     }
 
+    @font-face {
+    	font-family:"Maison Neue Light";
+		src: url("static/fonts/MaisonNeueWEB-Light.woff2") format('woff2');
+    }
+
+    @font-face {
+    	font-family:"Maison Neue Mono";
+		src: url("static/fonts/MaisonNeueWEB-Mono.woff2") format('woff2');
+    }
+
+    @font-face {
+    	font-family:"Maison Neue Demi";
+		src: url("static/fonts/MaisonNeueWEB-Demi.woff2") format('woff2');
+    }
+
+    @font-face {
+    	font-family:"Maison Neue Bold";
+		src: url("static/fonts/MaisonNeueWEB-Bold.woff2") format('woff2');
+    }
+
+	@font-face {
+		font-family:"Maison Mono Light";
+		src: url("static/fonts/MaisonMonoWEB-Light.woff2") format('woff2');
+
+		MaisonNeueWEB-Bold.woff2
+	} 
+
     body {
       background-color:#080A40;
     }
 
     .btn {
-      font-size:16px;
+      font-size:14px;
       border-color:white;
       border-width:2px;
       border-radius:0px;
@@ -43,15 +70,21 @@
     }
 
     a {
+      text-transform:uppercase;
       color: white;
     }
 
     a:hover {
       color:white;
+      text-decoration:underline;
     }
 
     .navbar-nav a:hover {
       color:#080A40;
+    }
+
+    .navbar-brand {
+    	font-family: "Maison Neue Demi";
     }
 
     .info a {
