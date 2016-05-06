@@ -97,6 +97,7 @@ function draw() {
 
             .on("mousedown", function(d) {
                 d3.selectAll('.openPorts').remove()
+                d3.selectAll('.hostInfo').remove()
                 d3.selectAll('.key').selectAll('.full-circle').remove()
                 d3.selectAll('.footer.btn').remove()
                 
@@ -114,8 +115,8 @@ function draw() {
 
                 $('div.col-md-2').height(colHeight);
                 legend.text('host info')
-                getHostInfo(selection)
                 checkForEmptyServices(selection)
+                getHostInfo(selection)
                 createFooterBtn(selection)
             })
 
@@ -151,6 +152,7 @@ function draw() {
             function createFooterBtn(selection){
 
                 var openPorts = d3.selectAll('.openPorts')
+                var hostInfo = d3.selectAll('.openPorts')
                 d3.selectAll('div.content').append('div')
                     .attr('class', 'footer btn')
                     .text('legend')
@@ -161,12 +163,14 @@ function draw() {
                             d3.select(this).text('host info')
                             d3.select('h6.legend').text('legend')
                             d3.selectAll('.openPorts').remove()
+                            d3.selectAll('.hostInfo').remove()
                             redrawColorkey()
       
                         } else {
                             d3.select(this).text('legend')
                             d3.select('h6.legend').text('host info')
                             checkForEmptyServices(selection)
+                            getHostInfo(selection)
                             d3.selectAll('.full-circle').remove()
 
                             }
@@ -178,23 +182,27 @@ function draw() {
                 var ip = node.__data__.IP;
                 var id = node.__data__.Id;
 
-                return d3.select("body").selectAll("div.host")
-                    .html("<p class='sub-hed-mono'>IP ADDRESS</p>" + "<p class='margin-b1'>" + ip + "</p>" +
-                        "<p class='sub-hed-mono'>MAC ADDRESS</p>" + "<p class='margin-b1'>" + id +"<p>")
-       
+                var hostInfo = {'IP': ip, 'ID': id}
+
+                return d3.select("body").selectAll("div.host").html("<p class='sub-hed-mono hostInfo'>HOSTS</p>")
+                	.selectAll("div.hostInfo")
+                	.data(d3.entries(hostInfo))
+                	.enter()
+                	.append('div')
+                	.attr('class', 'hostInfo host')
+                	.html(function(d) { return "<p class='width2'>" + d.key + "<a> " + d.value + "</a>"})
             }
         
             function checkForEmptyServices(node) {
                 var name = node.__data__.Id;
                 var ports = node.__data__.portsMap
-                console.info(d3.keys(ports))
-                
+    
                 if (d3.keys(ports).length === 0) {
                     return d3.select("body").selectAll("div.network")
                         .html("<p class='sub-hed-mono openPorts'>OPEN PORTS No open ports.</p>")
 
                 }
-                return d3.select("body").selectAll("div.network").html("<p class='sub-hed-mono'>OPEN PORTS</p>")
+                return d3.select("body").selectAll("div.network").html("<p class='sub-hed-mono openPorts'>OPEN PORTS</p>")
                 	.selectAll("div.openPorts")
                     .data(d3.entries(ports))
                     .enter()
